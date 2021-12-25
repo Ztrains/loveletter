@@ -3,7 +3,7 @@ import random, pprint
 # class which holds all card definitions
 class Card:
 
-    def __init__(self, power, name) -> None:
+    def __init__(self, power: int, name: str) -> None:
         self.power = power
         self.name = name
     
@@ -29,11 +29,8 @@ class Card:
                 count -= 1
         
         random.shuffle(deck)
-        # printDeck = [card.__dict__ for card in deck]
-        # print('deck:', printDeck)
         return deck
 
     def printDeck(deck):
-        # print([card.__dict__ for card in deck])
         pprint.pprint([card.__dict__ for card in deck])
 
