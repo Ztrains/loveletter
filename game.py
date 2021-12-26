@@ -1,11 +1,15 @@
+from typing import List
 from card import Card
 from player import Player
 
 
 class Game:
 
-    def __init__(self) -> None:
-        self.deck = Card.newDeck()
+    def __init__(self, players: List[Player]) -> None:
+        self.deck: List[Card] = Card.newDeck()
+        self.turn: Player = None    # for whose turn it is
+        self.players: List[Player] = players
+
         Card.printDeck(self.deck)
         
     def drawCard(self) -> Card:
@@ -36,7 +40,7 @@ class Game:
         else: pass
 
 
-    # all logic still needs to be added for functions below
+    # additional logic still needs to be added for functions below
 
     def playGuard(player: Player, target: Player):
         print('Guard played by ', player, 'against ', target)

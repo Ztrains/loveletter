@@ -1,4 +1,6 @@
 import random, pprint
+from typing import List
+from __future__ import annotations # needed for forward reference type hinting
 
 # class which holds all card definitions
 class Card:
@@ -20,7 +22,7 @@ class Card:
     cardCount = [5, 2, 2, 2, 2, 1, 1, 1]
     cardNames = ['Guard', 'Priest', 'Baron', 'Handmaid', 'Prince', 'King', 'Countess', 'Princess']
 
-    def newDeck():
+    def newDeck() -> List[Card]:
         deck = []
         for power, count in enumerate(Card.cardCount, start=1):
             while(count > 0):
