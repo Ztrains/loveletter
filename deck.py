@@ -8,7 +8,8 @@ class Deck:
 		self.deck: List[Card] = []
 		cardCount = [5, 2, 2, 2, 2, 1, 1, 1]
 		for power, count in enumerate(cardCount, start=1):
-			self.deck.append(Card(power, CardType(power)) for _ in range(count))
+			for _ in range(count):
+				self.deck.append(Card(power, CardType(power)))
 
 		self.shuffle()
 
