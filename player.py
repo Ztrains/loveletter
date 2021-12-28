@@ -1,5 +1,6 @@
 from typing import List
 from card import Card
+from hand import Hand
 
 class Player:
 
@@ -7,13 +8,10 @@ class Player:
         self.isAlive: bool = True       # set to False if the player is knocked out of the round
         self.isProtected: bool = False  # set to True for handmaid protection
         self.isTurn: bool = False       # set to True if it is the player's turn
-        self.hand: List[Card] = []      # player's hand of cards
+        self.hand: Hand = Hand()        # player's hand of cards
         self.wins: int = 0              # how many round wins (crowns) the player is
         self.name = name                # allow player to enter their name
         self.playerID = playerID        # player's ID for lobby (0, 1, 2, or 3)
-
-    def getCard(self) -> Card:          # gets the one card in player's hand if not their turn
-        return self.hand[0]
 #
 #    @property
 #    def isAlive(self):

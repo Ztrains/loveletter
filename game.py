@@ -48,7 +48,7 @@ class Game:
         # TODO: add logic to prompt player to guess card of target
         guess = '???'
         
-        if (target.getCard().name == guess):
+        if (target.hand.getCard().power == guess):
             target.isAlive = False
             # probably need more here
         else:
@@ -59,14 +59,14 @@ class Game:
         print('Priest played by ', player, 'against ', target)
 
         # need to cast to Card type maybe?
-        return target.getCard()
+        return target.hand.getCard()
         
 
     def playBaron(player: Player, target: Player):
         print('Baron played by ', player, 'against ', target)
 
         # need logic for removing baron before comparison
-        return player.getCard() > target.getCard()
+        return player.hand.getCard() > target.hand.getCard()
 
 
     def playHandmaid(player: Player, target: Player):
@@ -80,18 +80,18 @@ class Game:
     def playPrince(player: Player, target: Player):
         print('Prince played by ', player, 'against ', target)
 
-        discardedCard = target.hand.pop()
+        discardedCard = target.hand.discardCard()
         # add logic to share discarded card with gameserver for all to see
-        target.hand.append(Game.drawCard())
+        target.hand.addCard(Game.drawCard())
 
 
     def playKing(player: Player, target: Player):
         print('King played by ', player, 'against ', target)
         
         # add logic to remove king from hand before trade
-        tradedCard = target.hand.pop()
-        target.hand.append(player.hand.pop())
-        player.hand.append(tradedCard)
+        tradedCard = target.hand.discardCard()
+        target.hand.addCard(player.hand.discardCard())
+        player.hand.addCard(tradedCard)
 
 
     def playCountess(player: Player, target: Player):
