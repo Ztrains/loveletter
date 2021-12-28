@@ -1,44 +1,39 @@
 from typing import List
-from card import Card
+from card import Card, CardType
 from player import Player
-
+from deck import Deck
 
 class Game:
 
     def __init__(self, players: List[Player]) -> None:
-        self.deck: List[Card] = Card.newDeck()  # the card deck for the game
+        self.deck: Deck = Deck()                # the card deck for the game
         self.turn: Player = None                # whose turn it currently is
         self.players: List[Player] = players    # list of players in the game
 
-        Card.printDeck(self.deck)               # prints deck for testing
-        
-    def drawCard(self) -> Card:
-        return self.deck.pop()
+        Deck.printDeck()                        # prints deck for testing
 
     # is it even worth having this function? (probably not)
     # could just check the card from gameserver when played and call appropriate func from there
     def playCard(card: Card, player: Player, target: Player):
-        if (card.power == 1):
+        if (card.power == CardType.Guard):
             Game.playGuard(player, target)
-        elif (card.power == 2):
+        elif (card.power == CardType.Priest):
             Game.playPriest(player, target)
-        elif (card.power == 3):
+        elif (card.power == CardType.Baron):
             Game.playBaron(player, target)
-        elif (card.power == 4):
+        elif (card.power == CardType.Handmaid):
             Game.playHandmaid(player, target)
-        elif (card.power == 5):
+        elif (card.power == CardType.Prince):
             Game.playPrince(player, target)
-        elif (card.power == 6):
+        elif (card.power == CardType.King):
             Game.playKing(player, target)
-        elif (card.power == 7):
-            if (any(card.name == 'King' or card.name == 'Prince' for card in player.hand)):
+        elif (card.power == CardType.Countess):
+            if (any(card.power == CardType.Prince or card.power == CardType.King for card in player.hand)):
                 print('can\'t play countess, you have a king or prince in your hand')
             else:
                 Game.playCountess(player, target)
-        elif (card.power == 8):
+        elif (card.power == CardType.Princess):
             Game.playPrincess(player, target)
-        else: pass
-
 
     # additional logic still needs to be added for functions below
 
@@ -82,7 +77,7 @@ class Game:
 
         discardedCard = target.hand.pop()
         # add logic to share discarded card with gameserver for all to see
-        target.hand.append(Game.drawCard())
+        target.hand.append(Game.deck.drawCard())
 
 
     def playKing(player: Player, target: Player):
