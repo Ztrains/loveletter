@@ -6,11 +6,11 @@ from player import Player
 class Game:
 
     def __init__(self, players: List[Player]) -> None:
-        self.deck: List[Card] = Card.newDeck()
-        self.turn: Player = None    # for whose turn it is
-        self.players: List[Player] = players
+        self.deck: List[Card] = Card.newDeck()  # the card deck for the game
+        self.turn: Player = None                # whose turn it currently is
+        self.players: List[Player] = players    # list of players in the game
 
-        Card.printDeck(self.deck)
+        Card.printDeck(self.deck)               # prints deck for testing
         
     def drawCard(self) -> Card:
         return self.deck.pop()
@@ -45,7 +45,7 @@ class Game:
     def playGuard(player: Player, target: Player):
         print('Guard played by ', player, 'against ', target)
 
-        # TODO: add gameserver logic to prompt player to guess card of target
+        # TODO: add logic to prompt player to guess card of target
         guess = '???'
         
         if (target.getCard().name == guess):

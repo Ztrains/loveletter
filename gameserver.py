@@ -1,43 +1,42 @@
-import socket
+import socketserver
+from typing import List
+from lobby import Lobby
 
-from game import Game
+from player import Player
 
-class Gameserver:
+# put this class in here instead of its own file just cause it's only this big
+class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    daemon_threads = True
+    allow_reuse_address = True
 
-    def __init__(self) -> None:
 
-        self.game: Game = None
+class GameServer(socketserver.StreamRequestHandler):
 
-        serv_sock = socket.socket(
-            socket.AF_INET,
-            socket.SOCK_STREAM,
-            proto = 0
-        )
+    def handle(self):
+        serverLobby: Lobby = self.server.lobby  # lobby obj created in the server obj below
+        
+        currentLobbyID = serverLobby.idCounter
+        serverLobby.idCounter += 1
 
-        host = '127.0.0.1'
-        port = 8073
-
-        serv_sock.bind((host, port))
-        serv_sock.listen(5)
-        print('server listening on', port)
+        serverLobby.connectedPlayers.append(Player(f'Player{currentLobbyID}', \
+            currentLobbyID))
+        print(serverLobby.connectedPlayers[currentLobbyID].name, 'connected from', \
+            self.client_address)
 
         while True:
-            # Accept new connections in an infinite loop.
-            client_sock, client_addr = serv_sock.accept()
-            print('New connection from', client_addr)
+            data = self.rfile.readline()
+            # Only when the client closed its end will readline return the empty string
+            if not data:
+                break
+            self.wfile.write(data.decode('utf-8').upper().encode('utf-8'))
 
-            chunks = []
-            while True:
-                
-                # Keep reading while the client is writing.
-                data = client_sock.recv(2048)
-                if not data:
-                    # Client is done with sending.
-                    break
-                chunks.append(data)
+        # TODO: add logic to remove player from lobby.connectedPlayers here
+        print(serverLobby.connectedPlayers[currentLobbyID].name, 'disconnected')
 
-            client_sock.sendall(b''.join(chunks))
-            client_sock.close()
-    
-    def startGame(self):
-        self.game = Game() 
+
+# server blocks on multiple clients, needs threading for each client
+HOST, PORT = 'localhost', 8073
+with ThreadedTCPServer((HOST, PORT), GameServer) as server:
+    print('threaded socket server running')
+    server.lobby = Lobby()
+    server.serve_forever()

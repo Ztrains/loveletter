@@ -1,24 +1,14 @@
+from __future__ import annotations # needed for forward reference type hinting
 import random, pprint
 from typing import List
-from __future__ import annotations # needed for forward reference type hinting
 
 # class which holds all card definitions
 class Card:
 
     def __init__(self, power: int, name: str) -> None:
-        self.power = power
-        self.name = name
+        self.power = power  # power of card (1 for guard, 8 for princess, etc.)
+        self.name = name    # name of card (Baron, Prince, etc.)
     
-    guard = 1
-    priest = 2
-    baron = 3
-    handmaid = 4
-    prince = 5
-    king = 6
-    countess = 7
-    princess = 8
-
-    cards = [guard, priest, baron, handmaid, prince, king, countess, princess]
     cardCount = [5, 2, 2, 2, 2, 1, 1, 1]
     cardNames = ['Guard', 'Priest', 'Baron', 'Handmaid', 'Prince', 'King', 'Countess', 'Princess']
 
