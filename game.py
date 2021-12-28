@@ -1,19 +1,16 @@
 from typing import List
 from card import Card
 from player import Player
-
+from deck import Deck
 
 class Game:
 
     def __init__(self, players: List[Player]) -> None:
-        self.deck: List[Card] = Card.newDeck()  # the card deck for the game
+        self.deck: Deck = Deck()                # the card deck for the game
         self.turn: Player = None                # whose turn it currently is
         self.players: List[Player] = players    # list of players in the game
 
-        Card.printDeck(self.deck)               # prints deck for testing
-        
-    def drawCard(self) -> Card:
-        return self.deck.pop()
+        Deck.printDeck()                        # prints deck for testing
 
     # is it even worth having this function? (probably not)
     # could just check the card from gameserver when played and call appropriate func from there
@@ -82,7 +79,7 @@ class Game:
 
         discardedCard = target.hand.pop()
         # add logic to share discarded card with gameserver for all to see
-        target.hand.append(Game.drawCard())
+        target.hand.append(Game.deck.drawCard())
 
 
     def playKing(player: Player, target: Player):
