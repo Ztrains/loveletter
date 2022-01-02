@@ -15,24 +15,22 @@ class GameServer(socketserver.StreamRequestHandler):
     def handle(self):
         serverLobby: Lobby = self.server.lobby  # lobby obj created in the server obj below
         
-
-        # prompt client for the name they want to use
-        #self.wfile.write('Welcome to Love Letter, enter your name to join.'.encode('utf-8'))
         clientName = self.rfile.readline().decode('utf-8').strip()
         #print('DEBUG received name', clientName)
         self.wfile.write(f'Welcome, {clientName}'.encode('utf-8'))
-        #print('DEBUG after 2nd welcome')
-
 
         currentLobbyID = serverLobby.idCounter
         serverLobby.idCounter += 1
 
-        serverLobby.connectedPlayers.append(Player(clientName, \
-            currentLobbyID))
-        print(serverLobby.connectedPlayers[currentLobbyID].name, 'connected from', \
-            self.client_address)
+        serverLobby.connectedPlayers[clientName] = Player(clientName, currentLobbyID)
 
-        serverLobby.isFull()
+        print(clientName, 'connected from', self.client_address)
+
+        isFull = serverLobby.isFull()
+        if isFull:
+            self.wfile.write('Lobby full, game starting'.encode('utf-8'))
+        else:
+            pass
 
         while True:
             data = self.rfile.readline()
@@ -41,10 +39,8 @@ class GameServer(socketserver.StreamRequestHandler):
                 break
             self.wfile.write(data.decode('utf-8').upper().encode('utf-8'))
 
-        
-        print(serverLobby.connectedPlayers[currentLobbyID].name, 'disconnected')
-        #serverLobby.connectedPlayers.remove(serverLobby.connectedPlayers[currentLobbyID])
-        #print('connected player count now', len(serverLobby.connectedPlayers))
+        serverLobby.connectedPlayers.pop(clientName)
+        print(clientName, 'disconnected')
 
 
 # server blocks on multiple clients, needs threading for each client
