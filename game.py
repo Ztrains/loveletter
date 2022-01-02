@@ -10,7 +10,15 @@ class Game:
         self.turn: Player = None                # whose turn it currently is
         self.players: List[Player] = players    # list of players in the game
 
-        Card.printDeck(self.deck)               # prints deck for testing
+        Card.printDeck(self.deck)               # prints deck for 
+        self.startRound()
+        
+
+    def startRound(self):
+        print('Round started')
+
+    def endGame(self):
+        pass
         
     def drawCard(self) -> Card:
         return self.deck.pop()
