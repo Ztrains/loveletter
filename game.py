@@ -1,26 +1,30 @@
-from typing import List
+from typing import Dict, List
 from card import Card
 from player import Player
 
 
 class Game:
 
-    def __init__(self, players: List[Player]) -> None:
-        self.deck: List[Card] = Card.newDeck()  # the card deck for the game
-        self.turn: Player = None                # whose turn it currently is
-        self.players: List[Player] = players    # list of players in the game
+    def __init__(self, players: Dict[str, Player]) -> None:
+        self.deck: List[Card] = Card.newDeck()      # the card deck for the game
+        self.turn: Player = None                    # whose turn it currently is
+        self.players: Dict[str, Player] = players   # list of players in the game
 
-        Card.printDeck(self.deck)               # prints deck for 
+        Card.printDeck(self.deck)
         self.startRound()
         
 
     def startRound(self):
         print('Round started')
+        for player in self.players.values():
+            player.addCardToHand(self.drawCard())
+
 
     def endGame(self):
         pass
         
     def drawCard(self) -> Card:
+        print('Drawing card, deck size will be', len(self.deck) - 1)
         return self.deck.pop()
 
     # is it even worth having this function? (probably not)

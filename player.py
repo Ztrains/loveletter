@@ -12,8 +12,11 @@ class Player:
         self.name = name                # allow player to enter their name
         self.playerID = playerID        # player's ID for lobby (0, 1, 2, or 3)
 
-    def getCard(self) -> Card:          # gets the one card in player's hand if not their turn
+    def getCard(self) -> Card:          # returns card in players hand (assuming they only have 1)
         return self.hand[0]
+
+    def addCardToHand(self, card: Card) -> None:
+        self.hand.append(card)
 #
 #    @property
 #    def isAlive(self):

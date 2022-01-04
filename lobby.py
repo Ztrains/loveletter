@@ -15,10 +15,10 @@ class Lobby:
     # starts game if lobby is full (4 players)
     def isFull(self) -> bool:
         if self.isOpen:
-            if len(self.connectedPlayers) == 4:
+            if len(self.connectedPlayers) == 4:     # 4 is max number of players
                 print('lobby is full, game starting')
-                self.isOpen = False
-                game = Game(self.connectedPlayers)
+                game = Game(self.connectedPlayers)  # add class var? or create in server?
+                self.isOpen = False                 # tells server game is started and sends cards
                 return True
         else:
             # TODO: add logic to send to client attempting to connect that lobby is closed
