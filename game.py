@@ -13,18 +13,25 @@ class Game:
         self.players: List[Player] = [] # list of players connected to the game
         self.maxPlayers = 2             # max number of players before game starts
         self.isStarted: bool = False    # state of if game is started yet
+        self.isInRound: bool = False    # state of if round is currently active
 
 
     def startGame(self) -> None:
         self.isStarted = True
         self.deck = Card.newDeck()
+        self.isInRound = True
         random.shuffle(self.players)    # randomizes order of players
         Card.printDeck(self.deck)
-        self.startRound()
+        self.gameLoop()
     
     def gameLoop(self):
-        while True:
-            pass
+        while True: 
+            while self.isInRound:       # loop for a round of the game
+                pass
+            
+            # round over, get a new deck
+            self.deck = Card.newDeck()
+
         
         
 
