@@ -1,4 +1,4 @@
-import socket, sys, pickle
+import socket, sys, pickle, time
 from card import Card
 
 from player import Player
@@ -15,8 +15,7 @@ class Client:
     def receive():
         pass
 
-# should turn this into a connectToServer() function which spawns a new thread for the connection
-# also a sendToServer() and receiveFromServer() funcs, and constructor with Player obj for client
+
 if __name__ == '__main__':
 
     HOST, PORT = "localhost", 8073
@@ -33,10 +32,15 @@ if __name__ == '__main__':
         sock.recv(1024)                                 # receive welcome from server with 
         
         print('waiting for game to start...')
-        msg = sock.recv(1024)                                 # wait for game start msg from server
-        print(msg.decode('utf-8'))
+        while True:
+            msg = sock.recv(1024)                       # wait for game start msg from server
+            decodedMsg = msg.decode('utf-8')
+            print('msg:', decodedMsg)
+            if decodedMsg == 'Game started':
+                break
+            time.sleep(1)
 
-        card = sock.recv(1024)                                 # get drawn card from server
+        card = sock.recv(1024)                          # get drawn card from server
         unpickledCard = pickle.loads(card)
         print('You drew a', unpickledCard.name)
 

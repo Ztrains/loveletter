@@ -1,3 +1,5 @@
+import random
+
 from typing import Dict, List
 from card import Card
 from player import Player
@@ -5,23 +7,46 @@ from player import Player
 
 class Game:
 
-    def __init__(self, players: Dict[str, Player]) -> None:
-        self.deck: List[Card] = Card.newDeck()      # the card deck for the game
-        self.turn: Player = None                    # whose turn it currently is
-        self.players: Dict[str, Player] = players   # list of players in the game
+    def __init__(self) -> None:
+        self.deck: List[Card] = []      # the card deck for the game
+        self.turn: Player = None        # whose turn it currently is
+        self.players: List[Player] = [] # list of players connected to the game
+        self.maxPlayers = 2             # max number of players before game starts
+        self.isStarted: bool = False    # state of if game is started yet
 
+
+    def startGame(self) -> None:
+        self.isStarted = True
+        self.deck = Card.newDeck()
+        random.shuffle(self.players)    # randomizes order of players
         Card.printDeck(self.deck)
         self.startRound()
+    
+    def gameLoop(self):
+        while True:
+            pass
+        
         
 
     def startRound(self):
         print('Round started')
-        for player in self.players.values():
+        for player in self.players:
             player.addCardToHand(self.drawCard())
 
 
     def endGame(self):
         pass
+
+    def isFull(self) -> None:
+        if self.isStarted:
+            # TODO: add logic rejecting new connections if game already started
+            pass
+        if len(self.players) == self.maxPlayers:
+            self.startGame()
+
+    # this doesn't work properly if two players have the same name
+    def getPlayerByName(self, name: str) -> Player:
+        return next(player for player in self.players if player.name == name)
         
     def drawCard(self) -> Card:
         print('Drawing card, deck size will be', len(self.deck) - 1)
