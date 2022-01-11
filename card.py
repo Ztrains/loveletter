@@ -5,6 +5,8 @@ from typing import List
 # class which holds all card definitions
 class Card:
 
+    # TODO: add function or similar to check which cards need a target, which are just played for self, etc.
+
     cardCount = [5, 2, 2, 2, 2, 1, 1, 1]
     cardNames = ['Guard', 'Priest', 'Baron', 'Handmaid', 'Prince', 'King', 'Countess', 'Princess']
 

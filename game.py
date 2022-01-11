@@ -1,4 +1,4 @@
-import random
+import random, threading, time
 
 from typing import Dict, List
 from card import Card
@@ -14,47 +14,80 @@ class Game:
         self.maxPlayers = 2             # max number of players before game starts
         self.isStarted: bool = False    # state of if game is started yet
         self.isInRound: bool = False    # state of if round is currently active
+        self.roundNum: int = 0          # what round number it currently is
 
 
     def startGame(self) -> None:
-        self.isStarted = True
-        self.deck = Card.newDeck()
-        self.isInRound = True
         random.shuffle(self.players)    # randomizes order of players
-        Card.printDeck(self.deck)
+        self.startRound()
+        self.isStarted = True
         self.gameLoop()
     
     def gameLoop(self):
         while True: 
-            while self.isInRound:       # loop for a round of the game
-                pass
+            #playersInRound = list(self.players) # copy of self.players
+            print('# of players still alive:', self.numPlayersStillAlive())   # counts # of player.isAlive == True
+            while self.numPlayersStillAlive() > 1:       # while number of players with isAlive=True > 1 (more than one player alive)
+                for player in self.players:
+                    if self.numPlayersStillAlive == 1:
+                        print('only 1 player left alive, round over')
+                        break
+                    if player.isAlive:
+                        print(player.name, 'turn to play in Game.gameLoop()')
+                        player.isTurn = True
+                        
+                        while player.isTurn is True:
+                            # wait until isTurn is set to False after performing logic for player's turn
+                            pass
+
+                        # TODO: add some logic to wait for response from client, perform logic, then set isTurn to false and continue to next player
+
+                    else:
+                        print(player.name, 'is out, going to next player')
             
-            # round over, get a new deck
-            self.deck = Card.newDeck()
+            # round over, start a new round
+            roundWinner = next(player for player in self.players if player.isAlive is True)
+            print('Round winner:', roundWinner.name)
+            roundWinner.wins += 1
+            self.startRound()
 
         
         
 
     def startRound(self):
-        print('Round started')
+        self.roundNum += 1
+        print('Round', self.roundNum, 'starting')
+        
+        self.deck = Card.newDeck()
+        Card.printDeck(self.deck)
+
+        self.isInRound = True
+
         for player in self.players:
             player.addCardToHand(self.drawCard())
+            player.isAlive = True
 
 
     def endGame(self):
         pass
 
     def isFull(self) -> None:
+        print('DEBUG isFull len(self.players):', len(self.players))
         if self.isStarted:
             # TODO: add logic rejecting new connections if game already started
             pass
         if len(self.players) == self.maxPlayers:
-            self.startGame()
+            threading.Thread(target=self.startGame).start()
+            #self.startGame()
+
+    def numPlayersStillAlive(self) -> int:
+        return len([player for player in self.players if player.isAlive is True])
 
     # this doesn't work properly if two players have the same name
     def getPlayerByName(self, name: str) -> Player:
         return next(player for player in self.players if player.name == name)
         
+    # should probably move this logic out to Card class
     def drawCard(self) -> Card:
         print('Drawing card, deck size will be', len(self.deck) - 1)
         return self.deck.pop()
