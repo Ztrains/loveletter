@@ -21,7 +21,7 @@ class Client:
     def receive():
         pass
 
-
+# TODO: refactor almost all of this below to use functions and be much cleaner
 if __name__ == '__main__':
 
     HOST, PORT = "localhost", 8073
@@ -81,8 +81,9 @@ if __name__ == '__main__':
                     print('Invalid input, enter 1 or 2')
             
             print('DEBUG before json serialization')
+
             # TODO: actually fill out target var
-            target = 'testTarget'
+            target = 'bob'
             cardIndex = int(line) - 1
             dictToSend: Dict[str, str] = {'cardName': client.player.hand[cardIndex].name, 'target': target}
             encodedJson = json.dumps(dictToSend)

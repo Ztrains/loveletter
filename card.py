@@ -5,10 +5,11 @@ from typing import List
 # class which holds all card definitions
 class Card:
 
-    # TODO: add function or similar to check which cards need a target, which are just played for self, etc.
+    # TODO: add easter egg for JD replacing princess
 
     cardCount = [5, 2, 2, 2, 2, 1, 1, 1]
     cardNames = ['Guard', 'Priest', 'Baron', 'Handmaid', 'Prince', 'King', 'Countess', 'Princess']
+    cardsWithTarget = ['Guard', 'Priest', 'Baron', 'Prince', 'King']
 
     def __init__(self, power: int, name: str) -> None:
         self.power = power  # power of card (1 for guard, 8 for princess, etc.)
@@ -25,6 +26,15 @@ class Card:
         random.shuffle(deck)
         return deck
 
-    def printDeck(deck):
+    def printDeck(deck: List[Card]):
         pprint.pprint([card.__dict__ for card in deck])
+
+    def needsTarget(card: Card) -> bool:
+        if card.name in Card.cardsWithTarget:
+            return True
+        return False
+
+    def getCardByName(name: str) -> Card:
+        power: int = Card.cardNames.index(name) + 1
+        return Card(power, name)
 
