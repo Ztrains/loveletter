@@ -50,9 +50,6 @@ class GameServer(socketserver.StreamRequestHandler):
         game: Game = self.server.game
         #print(self.clientName, '@@@4')
         print('in gameserver startGame()')
-
-        # TODO: need to send all player info to each client
-
         self.wfile.write('Game started'.encode('utf-8'))
         currentPlayer = next(player for player in game.players if player.name == self.clientName)
         playerCard = currentPlayer.getCard()
@@ -91,16 +88,12 @@ class GameServer(socketserver.StreamRequestHandler):
         print('DEBUG 2nd card sent to', self.clientName, ', waiting for their turn')
         data = self.rfile.readline().decode('utf-8')           # read data from client
         receivedMove: Dict[str, str] = json.loads(data)
-        cardNamePlayed: str = receivedMove['cardName']
-        targetedPlayerName: str = receivedMove['target']
 
-        print(self.clientName, 'played', cardNamePlayed, 'against', targetedPlayerName)
-        
-        # TODO: need to return something here for result of card that was played
-        game.playCard(Card.getCardByName(cardNamePlayed), \
-            game.getPlayerByName(self.clientName), game.getPlayerByName(targetedPlayerName))
+        for key, val in receivedMove.items():
+            print('key:', key, 'val:', val)
 
-        
+        print('receivedMove[cardName]:', receivedMove['cardName'])
+        print('receivedMove[target]:', receivedMove['target'])
         
 
     # TODO: need to create msg structure for client/server communications (json?)
